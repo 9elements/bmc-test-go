@@ -21,8 +21,10 @@
     "GOARCH",
     "GOARM",
     "armv",
+    "cocogitto",
     "commitlint",
     "golangci",
+    "goreleaser",
     "libc",
     "wagoid"
   ],

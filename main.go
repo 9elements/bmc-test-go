@@ -3,6 +3,12 @@
 // Package main implements the core logic
 package main
 
-func main() {
+import (
+	"fmt"
+)
 
+const bmcTestGoVersion = "v0.0.0"
+
+func main() {
+	fmt.Println(bmcTestGoVersion)
 }
