@@ -1,0 +1,30 @@
+{
+  "ignorePaths": [
+    "**/.git/**",
+    ".cspell.json",
+    ".editorconfig",
+    ".github/dependabot.yml",
+    ".github/labeler.yml",
+    ".gitignore",
+    ".goreleaser.yaml",
+    ".mega-linter.yml",
+    "CHANGELOG.md",
+    "Taskfile.yml",
+    "go.mod",
+    "go.sum",
+    "megalinter"
+  ],
+  "language": "en",
+  "noConfigSearch": true,
+  "words": [
+    "GOARCH",
+    "GOARM",
+    "armv",
+    "commitlint",
+    "golangci",
+    "libc",
+    "wagoid"
+  ],
+  "ignoreWords": [],
+  "version": "0.2"
+}
