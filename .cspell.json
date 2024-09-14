@@ -3,6 +3,7 @@
     "**/.git/**",
     ".cspell.json",
     ".editorconfig",
+    ".github/CODEOWNERS",
     ".github/dependabot.yml",
     ".github/labeler.yml",
     ".gitignore",
