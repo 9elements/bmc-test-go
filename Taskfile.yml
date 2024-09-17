@@ -1,0 +1,55 @@
+---
+version: '3'
+vars:
+  SEMVER: 'v0.0.0'
+
+tasks:
+  build:
+    desc: Build go binary
+    cmds:
+      # For Matrix build a Taskfile v3.39.0 or newer is needed
+      - for:
+          matrix:
+            OS: ['linux']
+            ARCH: ['amd64', 'arm', 'arm64']
+        cmd: GOOS="{{.ITEM.OS}}" GOARCH="{{.ITEM.ARCH}}" go build -ldflags="-s -w" -o "bin/bmc-test-go-{{.ITEM.OS}}-{{.ITEM.ARCH}}-{{.SEMVER}}"
+
+  lint:
+    desc: Run linters
+    cmds:
+      - task: lint:revive
+      - task: lint:vet
+      - task: lint:staticcheck
+      - task: lint:golangci-lint
+
+  lint:revive:
+    desc: Faster and stricter golint replacement
+    cmds:
+      - revive ./...
+
+  lint:vet:
+    desc: Reports suspicious constructs
+    cmds:
+      - go vet ./...
+
+  lint:staticcheck:
+    desc: Static analysis and style rules enforcer
+    cmds:
+      - staticcheck -fail "" ./...
+
+  lint:golangci-lint:
+    desc: Collection of golang linters
+    cmds:
+      - golangci-lint run --issues-exit-code 0 ./...
+
+  format:
+    desc: Run gofumt (fork of gofmt, stricter) to format the code
+    cmds:
+      - gofumpt -w .
+
+  test:
+    desc: Run unit-tests
+    cmds:
+      - go test {{.CLI_ARGS}} -race -timeout 60m -shuffle=on -covermode=atomic -coverprofile coverage.out ./...
+      - go tool cover -func=coverage.out
+      - go tool cover -html=coverage.out -o coverage.html

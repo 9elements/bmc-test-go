@@ -1,1 +1,3 @@
-bmc-test-*
+bin/
+coverage.html
+coverage.out

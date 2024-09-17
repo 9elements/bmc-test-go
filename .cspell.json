@@ -20,6 +20,7 @@
   "words": [
     "GOARCH",
     "GOARM",
+    "Taskfile",
     "armv",
     "cocogitto",
     "commitlint",
