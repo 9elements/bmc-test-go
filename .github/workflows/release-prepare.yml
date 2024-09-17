@@ -34,6 +34,9 @@ jobs:
       - name: Update main.go
         run: |
           sed -i -E 's/const bmcTestGoVersion = .*/const bmcTestGoVersion = "${{ steps.semver.outputs.next }}"/g' main.go
+      - name: Update Taskfile.yml
+        run: |
+          sed -i -E "s/SEMVER: .*/SEMVER: '${{ steps.semver.outputs.next }}'/g" Taskfile.yml
 
       # Changelog
       - name: Get cocogitto
