@@ -27,7 +27,8 @@
     "golangci",
     "goreleaser",
     "libc",
-    "wagoid"
+    "wagoid",
+    "ipmitool"
   ],
   "ignoreWords": [],
   "version": "0.2"
