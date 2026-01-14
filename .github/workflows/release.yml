@@ -10,7 +10,7 @@
 #   - do the actual release with goreleaser
 
 name: release
-on:
+"on":
   pull_request:
     types:
       - closed

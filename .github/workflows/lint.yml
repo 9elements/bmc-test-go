@@ -1,8 +1,7 @@
 ---
 # Run linters
-
 name: lint
-on:
+"on":
   pull_request:
   pull_request_review:
     types: ['submitted']

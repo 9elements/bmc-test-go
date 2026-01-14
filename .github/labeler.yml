@@ -1,3 +1,4 @@
+---
 bugfix:
   - head-branch:
       - '^fix'
