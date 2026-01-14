@@ -2,7 +2,7 @@
 # Docs: https://github.com/actions/labeler
 name: 'labeler'
 
-on:
+"on":
   - pull_request_target
 
 permissions: read-all
