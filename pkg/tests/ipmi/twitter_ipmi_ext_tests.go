@@ -123,7 +123,7 @@ func testTwitterIPMIExtPnmGetReading(dev *testdevice.Device, _ *configuration.Co
 }
 
 func testTwitterIPMIExtRandomDelayACRestorePowerOn(dev *testdevice.Device, _ *configuration.Config,
-	) (
+) (
 	bool, error, error,
 ) {
 	const delayLSB uint8 = 0x30
