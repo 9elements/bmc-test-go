@@ -18,7 +18,7 @@ type Reporter struct {
 func SetupReporter(repType string, logfile string) (*Reporter, error) {
 	file := os.Stdout
 
-	var fm os.FileMode = 0600
+	var fm os.FileMode = 0o600
 
 	var err error
 
