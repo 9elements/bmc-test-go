@@ -670,7 +670,7 @@ func postRequestData(cfg *configuration.Config, imgpath string, timeout int64) (
 	if err != nil {
 		return "", fmt.Errorf("client.Do failed: %w", err)
 	}
-	defer response.Body.Close() //nolint:errcheck
+	defer response.Body.Close()
 
 	body, _ := io.ReadAll(response.Body)
 
@@ -714,7 +714,7 @@ func resetBMC(cfg *configuration.Config) error {
 		return fmt.Errorf("client.Do failed: %w", err)
 	}
 
-	defer resp.Body.Close() //nolint:errcheck
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
 		b, _ := io.ReadAll(resp.Body)
