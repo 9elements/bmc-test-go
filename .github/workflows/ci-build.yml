@@ -21,7 +21,7 @@ jobs:
         with:
           go-version: stable
       - name: install taskfile
-        uses: arduino/setup-task@v2
+        uses: arduino/setup-task@v3
       - name: build
         run: |
           task build
