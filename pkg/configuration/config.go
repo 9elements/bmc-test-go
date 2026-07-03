@@ -164,11 +164,21 @@ type Host struct {
 
 // BMC holds the information to connect to the specified BMC.
 type BMC struct {
-	BMCHost     string `yaml:"host"`
-	BMCUser     string `yaml:"user"`
-	BMCPassword string `yaml:"password"`
-	BMCSSHKey   string `yaml:"sshKey"`
-	SSHPort     string `yaml:"sshPort"`
+	BMCHost        string `yaml:"host"`
+	BMCRedfishPort int    `yaml:"redfishPort"`
+	BMCUser        string `yaml:"user"`
+	BMCPassword    string `yaml:"password"`
+	BMCSSHKey      string `yaml:"sshKey"`
+	SSHPort        string `yaml:"sshPort"`
+}
+
+// RedfishPort returns the configured redfish port, fallback to default
+func (b BMC) RedfishPort() int {
+	if b.BMCRedfishPort == 0 {
+		return 443
+	}
+
+	return b.BMCRedfishPort
 }
 
 // Firmware holds the paths for the binary running on the BMC and an golden image for

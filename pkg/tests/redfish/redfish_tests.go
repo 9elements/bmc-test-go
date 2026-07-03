@@ -621,6 +621,10 @@ func getFirmwareVersion(dev *testdevice.Device) (string, error) {
 
 	log.Printf("Debug: parts: %v\n", parts)
 
+	if len(parts) < 3 {
+		return "", fmt.Errorf("fw version did not split as expected: %s", fw.Version)
+	}
+
 	return parts[2][1:], nil
 }
 
