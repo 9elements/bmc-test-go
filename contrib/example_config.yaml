@@ -1,11 +1,12 @@
 ---
 version: 0
 name: ExampleServer
-bm_config:
-  bmc_host: bmcIP
-  bmc_user: root
-  bmc_password: 0penBmc
-  ssh_port: "22"
+bmcConfig:
+  host: '10.93.130.125'
+  user: root
+  password: 0penBmc
+  redfishPort: 4443
+  sshPort: "22"
 numHosts: 1
 hosts:
   - host1:
@@ -20,8 +21,11 @@ testdata:
   system:
     guid: guid-string
   cpu:
-    cpuvendor: ""
-    cpumodel: ""
+    - manufacturer: ""
+      model: ""
+      architecture: ""
+      instructionSet: ""
+      type: ""
   voltage:
     - TestString 1
     - TestString 2

@@ -3,6 +3,8 @@ package testdevice
 import (
 	"errors"
 	"fmt"
+	"net"
+	"strconv"
 
 	"github.com/9elements/bmc-test-go/pkg/configuration"
 	"github.com/stmcginnis/gofish"
@@ -18,8 +20,10 @@ type BMC struct {
 }
 
 func makeGofishConfig(config *configuration.Config) gofish.ClientConfig {
+	hostport := net.JoinHostPort(config.BMCHost, strconv.Itoa(config.RedfishPort()))
+
 	return gofish.ClientConfig{
-		Endpoint: "https://" + config.BMCHost,
+		Endpoint: "https://" + hostport,
 		Username: config.BMCUser,
 		Password: config.BMCPassword,
 		Insecure: true,
