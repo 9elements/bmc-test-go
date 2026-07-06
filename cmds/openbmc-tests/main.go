@@ -109,13 +109,10 @@ func listSuites() {
 	logger.Printf("List Suites")
 	logger.Printf("-------------------------------------------------------")
 	logger.Printf("-------------------------------------------------------")
-	logger.Println("ipmi")
-	logger.Println("ipmi-mct")
-	logger.Println("ipmi-twitter")
-	logger.Println("misc")
-	logger.Println("redfish")
-	logger.Println("smbios")
-	logger.Println("bmc-linux")
+
+	for name := range tests.Suites {
+		logger.Println(name)
+	}
 }
 
 func setupSuite(f *flags) (*testdevice.Device, *configuration.Config, error) {

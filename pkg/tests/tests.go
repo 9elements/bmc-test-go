@@ -36,19 +36,20 @@ func AllTests() []*framework.Test {
 	return ret
 }
 
+// Suites is the map of all available test suites
+var Suites = map[string]func() []*framework.Test{
+	"ipmi":         ipmi.GetTests,
+	"ipmi-mct":     ipmi.GetIPMIMCTTests,
+	"ipmi-twitter": ipmi.GetIPMITwitterTests,
+	"redfish":      redfish.GetTests,
+	"misc":         misc.GetTests,
+	"smbios":       smbios.GetTests,
+	"bmc-linux":    bmclinux.GetBMCLinuxTests,
+}
+
 // GetSuite collects the tests of the given suite name.
 func GetSuite(suite string) []*framework.Test {
-	suites := map[string]func() []*framework.Test{
-		"ipmi":         ipmi.GetTests,
-		"ipmi-mct":     ipmi.GetIPMIMCTTests,
-		"ipmi-twitter": ipmi.GetIPMITwitterTests,
-		"redfish":      redfish.GetTests,
-		"misc":         misc.GetTests,
-		"smbios":       smbios.GetTests,
-		"bmc-linux":    bmclinux.GetBMCLinuxTests,
-	}
-
-	ret, ok := suites[suite]
+	ret, ok := Suites[suite]
 	if !ok {
 		log.Printf("unknown suite name: %s", suite)
 

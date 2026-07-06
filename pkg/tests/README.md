@@ -1,11 +1,4 @@
 
 # Test suite definition
 
-- ipmi
-- ipmi-mct
-- ipmi-twitter
-- redfish
-- misc
-- smbios
-- bmc-linux
-
+Test Suites are defined in this folder and registered in `tests.go`.
