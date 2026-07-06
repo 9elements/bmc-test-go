@@ -37,7 +37,7 @@ func newBMC(execEnv string, config *configuration.Config) (*BMC, error) {
 	case "local":
 		ret.con = &LocalConn{}
 	case "remote":
-		hostport := fmt.Sprintf("%s:%s", cfg.BMCHost, cfg.SSHPort)
+		hostport := net.JoinHostPort(config.BMCHost, strconv.Itoa(config.SSHPort))
 
 		remoteConn, err := NewRemoteConn(hostport, config.BMCUser, config.BMCPassword)
 		if err != nil {
