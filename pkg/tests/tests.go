@@ -14,24 +14,11 @@ import (
 
 // AllTests collects all tests from all test packages and returns them as a slice of framework.Test.
 func AllTests() []*framework.Test {
-	size := len(ipmi.GetTests()) + len(ipmi.GetIPMIMCTTests()) + len(ipmi.GetIPMITwitterTests()) +
-		len(redfish.GetTests()) + len(misc.GetTests()) + len(smbios.GetTests()) + len(bmclinux.GetBMCLinuxTests())
+	ret := []*framework.Test{}
 
-	ret := make([]*framework.Test, 0, size)
-
-	ret = append(ret, ipmi.GetTests()...)
-
-	ret = append(ret, ipmi.GetIPMIMCTTests()...)
-
-	ret = append(ret, ipmi.GetIPMITwitterTests()...)
-
-	ret = append(ret, redfish.GetTests()...)
-
-	ret = append(ret, misc.GetTests()...)
-
-	ret = append(ret, smbios.GetTests()...)
-
-	ret = append(ret, bmclinux.GetBMCLinuxTests()...)
+	for _, f := range Suites {
+		ret = append(ret, f()...)
+	}
 
 	return ret
 }
