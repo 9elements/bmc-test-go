@@ -38,7 +38,7 @@ func validateCfgBMC(bmc *BMC) error {
 		err = fmt.Errorf("%w\n %w: bmc field 'sshKey'", err, errFieldEmpty)
 	}
 
-	if bmc.SSHPort == "" {
+	if bmc.SSHPort == 0 {
 		err = fmt.Errorf("%w\n %w: bmc field 'sshPort'", err, errFieldEmpty)
 	}
 
@@ -92,7 +92,7 @@ func validateCfgHost(host *Host, num int) error {
 		err = fmt.Errorf("%w\n %w: host%d field 'sshKey'", err, errFieldEmpty, num)
 	}
 
-	if host.SSHPort == "" {
+	if host.SSHPort == 0 {
 		err = fmt.Errorf("%w\n %w: host%d field 'sshPort'", err, errFieldEmpty, num)
 	}
 

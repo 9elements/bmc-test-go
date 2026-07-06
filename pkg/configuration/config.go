@@ -159,7 +159,7 @@ type Host struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	SSHKey   string `yaml:"sshKey"`
-	SSHPort  string `yaml:"sshPort"`
+	SSHPort  int    `yaml:"sshPort"`
 }
 
 // BMC holds the information to connect to the specified BMC.
@@ -169,7 +169,7 @@ type BMC struct {
 	BMCUser        string `yaml:"user"`
 	BMCPassword    string `yaml:"password"`
 	BMCSSHKey      string `yaml:"sshKey"`
-	SSHPort        string `yaml:"sshPort"`
+	SSHPort        int    `yaml:"sshPort"`
 }
 
 // RedfishPort returns the configured redfish port, fallback to default
