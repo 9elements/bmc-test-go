@@ -6,7 +6,7 @@ bmcConfig:
   user: root
   password: 0penBmc
   redfishPort: 4443
-  sshPort: "22"
+  sshPort: 22
 numHosts: 1
 hosts:
   - host1:

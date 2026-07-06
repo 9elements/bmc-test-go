@@ -46,7 +46,7 @@ func newHost(hostCfg configuration.Host) (*Host, error) {
 
 	return &Host{
 		Name:      hostCfg.Name,
-		hostport:  fmt.Sprintf("%s:%s", hostCfg.IP, hostCfg.SSHPort),
+		hostport:  fmt.Sprintf("%s:%d", hostCfg.IP, hostCfg.SSHPort),
 		sshConfig: sshConfig,
 	}, nil
 }
