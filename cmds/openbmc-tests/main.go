@@ -115,20 +115,6 @@ func listSuites() {
 	}
 }
 
-func setupSuite(f *flags) (*testdevice.Device, *configuration.Config, error) {
-	cfg, err := configuration.LoadConfig(f.configPath)
-	if err != nil {
-		return nil, nil, fmt.Errorf("loading configuration file failed: %w", err)
-	}
-
-	bmc, err := testdevice.NewDevice(f.execEnv, f.logType, f.logFile, cfg)
-	if err != nil {
-		return nil, nil, fmt.Errorf("failed to set up new device: %w", err)
-	}
-
-	return bmc, cfg, nil
-}
-
 func runCfgValidation(cfg *configuration.Config) error {
 	err := configuration.Validate(cfg)
 	if err != nil {
@@ -143,10 +129,10 @@ var (
 	errInvalidArgumentCount = errors.New("invalid argument count")
 )
 
-func runAgainstDevice(f *flags) error {
-	bmc, cfg, err := setupSuite(f)
+func runAgainstDevice(f *flags, cfg *configuration.Config) error {
+	bmc, err := testdevice.NewDevice(f.execEnv, f.logType, f.logFile, cfg)
 	if err != nil {
-		return fmt.Errorf("failed to set up device: %w", err)
+		return fmt.Errorf("failed to set up new device: %w", err)
 	}
 
 	defer func() {
@@ -165,8 +151,6 @@ func runAgainstDevice(f *flags) error {
 		return runAll(bmc, cfg)
 	case runCfgCmd:
 		runFromCfg(bmc, cfg)
-	case cfgCheckCmd:
-		return runCfgValidation(cfg)
 	default:
 		return fmt.Errorf("%w: %s", errUnknownCommand, f.cmd)
 	}
@@ -194,7 +178,16 @@ func run(args []string) error {
 		return nil
 	}
 
-	return runAgainstDevice(flags)
+	cfg, err := configuration.LoadConfig(flags.configPath)
+	if err != nil {
+		return fmt.Errorf("loading configuration file failed: %w", err)
+	}
+
+	if flags.cmd == cfgCheckCmd {
+		return runCfgValidation(cfg)
+	}
+
+	return runAgainstDevice(flags, cfg)
 }
 
 func main() {
