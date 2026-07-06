@@ -10,16 +10,15 @@ bmcConfig:
 numHosts: 1
 hosts:
   - host1:
+    name: exampleName
+    username: root
     ip: hostIP1
-    user: hostUser1
+    sshPort: 22
     password: hostPassword1
-  - host2:
-    ip: hostIP2
-    user: hostUser2
-    password: hostPassword2
 testdata:
   system:
     guid: guid-string
+  cpuCount: 1
   cpu:
     - manufacturer: ""
       model: ""

@@ -27,16 +27,14 @@ func validateCfgBMC(bmc *BMC) error {
 	}
 
 	if bmc.BMCUser == "" {
-		err = fmt.Errorf("%w\n %w: 'bmc field 'host'", err, errFieldEmpty)
+		err = fmt.Errorf("%w\n %w: 'bmc field 'user'", err, errFieldEmpty)
 	}
 
 	if bmc.BMCPassword == "" {
 		err = fmt.Errorf("%w\n %w: bmc field 'password'", err, errFieldEmpty)
 	}
 
-	if bmc.BMCSSHKey == "" {
-		err = fmt.Errorf("%w\n %w: bmc field 'sshKey'", err, errFieldEmpty)
-	}
+	// ssh key may be empty if password is used
 
 	if bmc.SSHPort == 0 {
 		err = fmt.Errorf("%w\n %w: bmc field 'sshPort'", err, errFieldEmpty)
@@ -88,9 +86,7 @@ func validateCfgHost(host *Host, num int) error {
 		err = fmt.Errorf("%w\n %w: host%d field 'password'", err, errFieldEmpty, num)
 	}
 
-	if host.SSHKey == "" {
-		err = fmt.Errorf("%w\n %w: host%d field 'sshKey'", err, errFieldEmpty, num)
-	}
+	// ssh key may be empty if password is used
 
 	if host.SSHPort == 0 {
 		err = fmt.Errorf("%w\n %w: host%d field 'sshPort'", err, errFieldEmpty, num)
