@@ -14,7 +14,6 @@ const (
 	listTestsCmd  = "list-tests"
 	listSuitesCmd = "list-suites"
 	runCfgCmd     = "run-from-cfg"
-	createCfgCmd  = "create-cfg"
 )
 
 type flags struct {
@@ -97,13 +96,6 @@ func defineRunFromCfgCmdsFlagSet(f *flags) *flag.FlagSet {
 	return runFromCfgFS
 }
 
-func defineCreateCFGCmdFlagSet(f *flags) *flag.FlagSet {
-	createCfgFS := flag.NewFlagSet(createCfgCmd, flag.ExitOnError)
-	createCfgFS.StringVar(&f.configPath, "path", "./", "Path to create config file")
-
-	return createCfgFS
-}
-
 func defineFlagSets(f *flags) map[string]*flag.FlagSet {
 	flagsets := map[string]*flag.FlagSet{
 		cfgCheckCmd:   defineCfgCheckFlagSet(f),
@@ -113,7 +105,6 @@ func defineFlagSets(f *flags) map[string]*flag.FlagSet {
 		listTestsCmd:  defineListTestCmdFlagSet(f),
 		listSuitesCmd: defineListSuitesCmdsFlagSet(),
 		runCfgCmd:     defineRunFromCfgCmdsFlagSet(f),
-		createCfgCmd:  defineCreateCFGCmdFlagSet(f),
 	}
 
 	return flagsets
