@@ -30,7 +30,7 @@ func makeGofishConfig(config *configuration.Config) gofish.ClientConfig {
 	}
 }
 
-func newBMC(execEnv string, cfg *configuration.Config) (*BMC, error) {
+func newBMC(execEnv string, config *configuration.Config) (*BMC, error) {
 	ret := &BMC{}
 
 	switch execEnv {
@@ -39,7 +39,7 @@ func newBMC(execEnv string, cfg *configuration.Config) (*BMC, error) {
 	case "remote":
 		hostport := fmt.Sprintf("%s:%s", cfg.BMCHost, cfg.SSHPort)
 
-		remoteConn, err := NewRemoteConn(hostport, cfg.BMCUser, cfg.BMCPassword)
+		remoteConn, err := NewRemoteConn(hostport, config.BMCUser, config.BMCPassword)
 		if err != nil {
 			return nil, err
 		}
@@ -49,7 +49,7 @@ func newBMC(execEnv string, cfg *configuration.Config) (*BMC, error) {
 		return nil, fmt.Errorf("%w: %s", errUnknownConenction, execEnv)
 	}
 
-	conn, err := gofish.Connect(makeGofishConfig(cfg))
+	conn, err := gofish.Connect(makeGofishConfig(config))
 	if err != nil {
 		return nil, fmt.Errorf("gofish connect failed: %w", err)
 	}
@@ -85,8 +85,8 @@ func (b *BMC) RedfishService() *gofish.Service {
 }
 
 // Reconnect reconnects to the bmc.
-func (b *BMC) Reconnect(cfg *configuration.Config) error {
-	conn, err := gofish.Connect(makeGofishConfig(cfg))
+func (b *BMC) Reconnect(config *configuration.Config) error {
+	conn, err := gofish.Connect(makeGofishConfig(config))
 	if err != nil {
 		return fmt.Errorf("reconnect failed: %w", err)
 	}
