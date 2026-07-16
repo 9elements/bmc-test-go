@@ -12,7 +12,7 @@ tasks:
           matrix:
             OS: ['linux']
             ARCH: ['amd64', 'arm', 'arm64']
-        cmd: GOOS="{{.ITEM.OS}}" GOARCH="{{.ITEM.ARCH}}" go build -ldflags="-s -w" -o "bin/bmc-test-go-{{.ITEM.OS}}-{{.ITEM.ARCH}}-{{.SEMVER}}" ./cmds/openbmc-tests
+        cmd: GOOS="{{.ITEM.OS}}" GOARCH="{{.ITEM.ARCH}}" go build -buildvcs=false -ldflags="-s -w" -o "bin/bmc-test-go-{{.ITEM.OS}}-{{.ITEM.ARCH}}-{{.SEMVER}}" ./cmds/openbmc-tests
 
   lint:
     desc: Run linters

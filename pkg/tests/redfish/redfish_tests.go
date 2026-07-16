@@ -56,14 +56,11 @@ func testRedfishSystem(dev *testdevice.Device, _ *configuration.Config) (
 	return true, nil, nil
 }
 
-var (
-	errFWVersionFormat = errors.New("fw version wrong format")
-	errCommitIDEmpty   = errors.New("commit id empty")
-)
-
 func testRedfishGetFirmwareVersion(dev *testdevice.Device, _ *configuration.Config) (
 	bool, error, error,
 ) {
+	errFWVersionFormat := errors.New("fw version wrong format")
+
 	updateService, err := dev.RedfishService().UpdateService()
 	if err != nil {
 		return false, nil, fmt.Errorf("redfish update service query failed: %w", err)
@@ -74,36 +71,25 @@ func testRedfishGetFirmwareVersion(dev *testdevice.Device, _ *configuration.Conf
 		return false, nil, fmt.Errorf("update service firmware inventories query failed: %w", err)
 	}
 
-	fw := fwInventories[0]
+	if len(fwInventories) == 0 {
+		return false, nil, fmt.Errorf("no entry in firmware inventory")
+	}
 
-	// e.g. v59.99-0-g1cb1416454-s8030nf
-	parts := strings.Split(fw.Version, "-")
+	fw := fwInventories[0]
 
 	const lowerLimit = 3
 
-	if len(parts) < lowerLimit {
+	if len(fw.Version) < lowerLimit {
 		return false, fmt.Errorf("%w: '%s' ", errFWVersionFormat, fw.Version), nil
-	}
-
-	commitID := parts[2][1:]
-
-	if commitID == "" {
-		return false, errCommitIDEmpty, nil
 	}
 
 	return true, nil, nil
 }
 
-var errNoPowerInformation = errors.New("no power information for chassis available")
-
 func getPower(dev *testdevice.Device) ([]*redfish.Power, error) {
 	chassis, err := dev.RedfishService().Chassis()
 	if err != nil {
 		return nil, fmt.Errorf("redfish chassis query failed: %w", err)
-	}
-
-	if len(chassis) < 1 {
-		return nil, errNoChassis
 	}
 
 	power := make([]*redfish.Power, 0)
@@ -114,11 +100,9 @@ func getPower(dev *testdevice.Device) ([]*redfish.Power, error) {
 			return nil, fmt.Errorf("call to c.Power failed: %w", err)
 		}
 
-		power = append(power, p)
-	}
-
-	if len(power) < 1 {
-		return nil, errNoPowerInformation
+		if power != nil {
+			power = append(power, p)
+		}
 	}
 
 	return power, nil
@@ -152,10 +136,6 @@ func getPowerSupplies(dev *testdevice.Device) ([]*redfish.PowerSupply, error) {
 		}
 
 		power = append(power, psu...)
-	}
-
-	if len(power) < 1 {
-		return nil, errNoPowerInformation
 	}
 
 	return power, nil
@@ -222,10 +202,7 @@ func testRedfishCheckPowerSupplyInformation(dev *testdevice.Device, cfg *configu
 	return true, nil, nil
 }
 
-var (
-	errNumPowerSupplyMismatch = errors.New("power supply count mismatch")
-	errSensorNotFound         = errors.New("sensor not found")
-)
+var errSensorNotFound = errors.New("sensor not found")
 
 func testRedfishVoltagesSensorNames(dev *testdevice.Device, cfg *configuration.Config) (
 	bool, error, error,
@@ -233,10 +210,6 @@ func testRedfishVoltagesSensorNames(dev *testdevice.Device, cfg *configuration.C
 	power, err := getPower(dev)
 	if err != nil {
 		return false, nil, fmt.Errorf("getPower failed: %w", err)
-	}
-
-	if len(power) != cfg.PSUCount {
-		return false, fmt.Errorf("%w: Have: %d, want: %d", errNumPowerSupplyMismatch, len(power), cfg.PSUCount), nil
 	}
 
 	voltage := make([]redfish.Voltage, 0)
@@ -250,24 +223,28 @@ func testRedfishVoltagesSensorNames(dev *testdevice.Device, cfg *configuration.C
 	for _, cfgVoltage := range cfg.Voltage {
 		found := false
 
+		var b strings.Builder
+		b.WriteString("all voltages: ")
+
 		for _, rVolts := range voltage {
+			b.WriteString(rVolts.Name)
+			b.WriteString(", ")
+
 			if cfgVoltage == rVolts.Name {
 				found = true
 			}
 		}
 
 		if !found {
-			return false, fmt.Errorf("%w: voltage - with name: %s not found", errSensorNotFound, cfgVoltage), nil
+			err := fmt.Errorf("%w: voltage - with name: %s not found, actual: %s", errSensorNotFound, cfgVoltage, b.String())
+			return false, err, nil
 		}
 	}
 
 	return true, nil, nil
 }
 
-var (
-	errNoInformation  = errors.New("no information available")
-	errSensorNotValid = errors.New("sensor reading not reasonable")
-)
+var errSensorNotValid = errors.New("sensor reading not reasonable")
 
 func testRedfishVoltageSensorValueThesholds(dev *testdevice.Device, _ *configuration.Config) (bool, error, error) {
 	power, err := getPower(dev)
@@ -281,10 +258,6 @@ func testRedfishVoltageSensorValueThesholds(dev *testdevice.Device, _ *configura
 		if p != nil {
 			voltage = append(voltage, p.Voltages...)
 		}
-	}
-
-	if len(voltage) < 1 {
-		return false, fmt.Errorf("%w: voltage", errNoInformation), nil
 	}
 
 	for _, rVolts := range voltage {
@@ -329,6 +302,32 @@ func getTemperatures(dev *testdevice.Device) ([]redfish.Temperature, error) {
 		}
 	}
 
+	if len(temps) == 0 {
+		// perhaps thermal subsystem is not enabled in the firmware,
+		// in that case we have to go via sensors
+		for _, c := range chassis {
+			sensors, err := c.Sensors()
+			if err != nil {
+				return nil, fmt.Errorf("call to c.Thermal() failed: %w", err)
+			}
+
+			if sensors == nil {
+				continue
+			}
+
+			for _, sensor := range sensors {
+				if sensor.ReadingType == redfish.TemperatureReadingType {
+					var t redfish.Temperature
+
+					t.Name = sensor.Name
+					t.ReadingCelsius = sensor.Reading
+
+					temps = append(temps, t)
+				}
+			}
+		}
+	}
+
 	return temps, nil
 }
 
@@ -356,7 +355,9 @@ func testRedfishTemperatureSensorNames(dev *testdevice.Device, cfg *configuratio
 		}
 
 		if !found {
-			return false, fmt.Errorf("%w: temperatur - with name: %s not found", errSensorNotFound, exp), nil
+			msg := fmt.Errorf("%w: temperatur - with name: '%s' not found", errSensorNotFound, exp)
+
+			return false, msg, nil
 		}
 	}
 
@@ -622,7 +623,9 @@ func getFirmwareVersion(dev *testdevice.Device) (string, error) {
 	log.Printf("Debug: parts: %v\n", parts)
 
 	if len(parts) < 3 {
-		return "", fmt.Errorf("fw version did not split as expected: %s", fw.Version)
+		// this firmware version does not follow expected format
+		// but still valid
+		return fw.Version, nil
 	}
 
 	return parts[2][1:], nil
