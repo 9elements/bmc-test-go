@@ -27,4 +27,4 @@ jobs:
           task build
       - name: validate example config
         run: |
-           ./bin/bmc-test-go-linux-amd64-v0.0.0 cfg-check contrib/example_config.yaml
+          ./bin/bmc-test-go-linux-amd64-v0.0.0 cfg-check contrib/example_config.yaml
