@@ -10,9 +10,8 @@ tasks:
       # For Matrix build a Taskfile v3.39.0 or newer is needed
       - for:
           matrix:
-            OS: ['linux']
             ARCH: ['amd64', 'arm', 'arm64']
-        cmd: GOOS="{{.ITEM.OS}}" GOARCH="{{.ITEM.ARCH}}" go build -ldflags="-s -w" -o "bin/bmc-test-go-{{.ITEM.OS}}-{{.ITEM.ARCH}}-{{.SEMVER}}" ./cmds/openbmc-tests
+        cmd: GOOS="linux" GOARCH="{{.ITEM.ARCH}}" go build -ldflags="-s -w -X main.version={{.SEMVER}}" -o "bin/bmc-test-go-{{.ITEM.ARCH}}" ./cmds/openbmc-tests
 
   lint:
     desc: Run linters

@@ -14,6 +14,7 @@ const (
 	listTestsCmd  = "list-tests"
 	listSuitesCmd = "list-suites"
 	runCfgCmd     = "run-from-cfg"
+	versionCmd    = "version"
 )
 
 type flags struct {
@@ -96,6 +97,10 @@ func defineRunFromCfgCmdsFlagSet(f *flags) *flag.FlagSet {
 	return runFromCfgFS
 }
 
+func defineVersionFlagSet() *flag.FlagSet {
+	return flag.NewFlagSet(versionCmd, flag.ExitOnError)
+}
+
 func defineFlagSets(f *flags) map[string]*flag.FlagSet {
 	flagsets := map[string]*flag.FlagSet{
 		cfgCheckCmd:   defineCfgCheckFlagSet(f),
@@ -105,6 +110,7 @@ func defineFlagSets(f *flags) map[string]*flag.FlagSet {
 		listTestsCmd:  defineListTestCmdFlagSet(f),
 		listSuitesCmd: defineListSuitesCmdsFlagSet(),
 		runCfgCmd:     defineRunFromCfgCmdsFlagSet(f),
+		versionCmd:    defineVersionFlagSet(),
 	}
 
 	return flagsets
