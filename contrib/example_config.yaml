@@ -20,11 +20,11 @@ testdata:
     guid: guid-string
   cpuCount: 1
   cpu:
-    - manufacturer: ""
-      model: ""
-      architecture: ""
-      instructionSet: ""
-      type: ""
+    - manufacturer: ''
+      model: ''
+      architecture: ''
+      instructionSet: ''
+      type: ''
   voltage:
     - TestString 1
     - TestString 2

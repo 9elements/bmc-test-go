@@ -4,7 +4,7 @@
 #
 # For detailed description see "release.yml"
 name: release-prepare
-"on": workflow_dispatch
+on: workflow_dispatch
 
 permissions:
   contents: write # To push new branch
