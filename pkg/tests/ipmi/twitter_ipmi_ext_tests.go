@@ -19,40 +19,34 @@ func GetIPMITwitterTests() []*framework.Test {
 		{
 			Name:      "Twitter IPMI Ext Set Service",
 			ShortName: "ipmi-twitter-00",
-			Status:    framework.StatusImplemented,
 			Function:  testTwitterIPMIExtSetService,
 		},
 		{
 			Name:      "Twitter IPMI Ext Get Service",
 			ShortName: "ipmi-twitter-01",
-			Status:    framework.StatusImplemented,
 			Function:  testTwitterIPMIExtGetService,
 		},
 		{
 			Name:      "Twitter IPMI Ext Clear CMOS",
 			ShortName: "ipmi-twitter-02",
-			Status:    framework.StatusNotImplemented,
 			Function:  testTwitterIPMIExtClearCMOS,
 		},
 
 		{
 			Name:      "Twitter IPMI Ext Pnm Get Reading",
 			ShortName: "ipmi-twitter-03",
-			Status:    framework.StatusImplemented,
 			Function:  testTwitterIPMIExtPnmGetReading,
 		},
 
 		{
 			Name:      "Twitter IPMI Ext Random Delay AC Restore Power On",
 			ShortName: "ipmi-twitter-04",
-			Status:    framework.StatusImplemented,
 			Function:  testTwitterIPMIExtRandomDelayACRestorePowerOn,
 		},
 
 		{
 			Name:      "Twitter IPMI Ext Get Post Codes",
 			ShortName: "ipmi-twitter-05",
-			Status:    framework.StatusImplemented,
 			Function:  testTwitterIPMIExtGetPostCodes,
 		},
 	}
@@ -100,7 +94,8 @@ func testTwitterIPMIExtGetService(dev *testdevice.Device, _ *configuration.Confi
 func testTwitterIPMIExtClearCMOS(_ *testdevice.Device, _ *configuration.Config) (
 	bool, error, error,
 ) {
-	return true, nil, nil
+	// TODO: implement
+	return false, fmt.Errorf("not implemented"), nil
 }
 
 func testTwitterIPMIExtPnmGetReading(dev *testdevice.Device, _ *configuration.Config) (

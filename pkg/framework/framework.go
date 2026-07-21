@@ -2,8 +2,6 @@
 package framework
 
 import (
-	"errors"
-
 	"github.com/9elements/bmc-test-go/pkg/configuration"
 	"github.com/9elements/bmc-test-go/pkg/testdevice"
 )
@@ -16,32 +14,16 @@ const (
 	ResultNotRun Result = 0 + iota
 	ResultDependencyFailure
 	ResultInternalFailure
-	ResultNotImplemented
 	ResultFail
 	ResultSuccess
 )
 
 func (r Result) String() string {
-	return [...]string{"TESTNOTRUN", "DEPENDENCY_FAILED", "INTERNAL_ERROR", "Not Implemented", "FAIL", "PASS"}[r]
+	return [...]string{"TESTNOTRUN", "DEPENDENCY_FAILED", "INTERNAL_ERROR", "FAIL", "PASS"}[r]
 }
 
 // Status implements a specific type for the implementation status of a test for easy string conversion.
 type Status int
-
-// The following constants indicate the implementation status of a test.
-const (
-	StatusImplemented Status = 0 + iota
-	StatusNotImplemented
-	StatusPartlyImplemented
-)
-
-// ErrNotImplemented serves as the default error returned by functions
-// not being implemented yet.
-var ErrNotImplemented = errors.New("not implemented")
-
-func (s Status) String() string {
-	return [...]string{"Implemented", "Not implemented", "Partly implemented"}[s]
-}
 
 // Test represents a one specific test.
 type Test struct {
@@ -77,10 +59,6 @@ func (t *Test) Run(dev *testdevice.Device, cfg *configuration.Config) bool {
 
 // RunTest is the function which manages the execution of all tests.
 func RunTest(test *Test, dev *testdevice.Device, testCfg *configuration.Config) bool {
-	if test.Status.String() == StatusNotImplemented.String() {
-		return true
-	}
-
 	ret := test.Run(dev, testCfg)
 
 	isError := test.ErrorText != "" || test.Result.String() == ResultFail.String()
