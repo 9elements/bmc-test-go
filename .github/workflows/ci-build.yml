@@ -28,3 +28,38 @@ jobs:
       - name: validate example config
         run: |
           ./bin/bmc-test-go-linux-amd64-v0.0.0 cfg-check contrib/example_config.yaml
+
+  build-arch:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: install dependencies
+        run: |
+          pacman --sync --refresh --sysupgrade --noconfirm
+          pacman --sync --needed --noconfirm \
+            ca-certificates \
+            git \
+            go \
+            go-task \
+            qemu-system-arm \
+            wget
+
+          # Arch installs Task as "go-task".
+          ln --symbolic /usr/bin/go-task /usr/local/bin/task
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+      - name: build
+        run: |
+          task build
+      - name: validate example config
+        run: |
+           ./bin/bmc-test-go-linux-amd64-v0.0.0 cfg-check contrib/example_config.yaml
+      - name: run on qemu bmc
+        run: |
+          ./scripts/ci-test-qemu.sh

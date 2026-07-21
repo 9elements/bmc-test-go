@@ -3,3 +3,7 @@ coverage.html
 coverage.out
 .env
 .aider*
+
+# firmware images
+*.mtd
+*.mtd.xz

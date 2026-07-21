@@ -1,0 +1,30 @@
+---
+version: 0
+name: Catalina BMC QEMU
+bmcConfig:
+  host: 'localhost'
+  user: root
+  password: 0penBmc
+  redfishPort: 4403
+  sshPort: 2202
+numHosts: 0
+hosts:
+testdata:
+  system:
+    guid: guid-string
+  cpuCount: 0
+  voltage:
+  temperatures:
+    - 'PDB INLET TEMP C'
+  fans:
+  dimms:
+    count: 0
+    partNo: 0123
+    vendor: TestDimmmVendor
+    capacity: 1336
+  fru:
+    Board:
+      productManufacturer: TestVal
+      productName: 'testName'
+      productSerial: 'testSerial'
+      boardManufacturer: testManufacturer
