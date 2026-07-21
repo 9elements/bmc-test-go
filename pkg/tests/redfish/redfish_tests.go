@@ -18,7 +18,7 @@ import (
 
 	"github.com/9elements/bmc-test-go/pkg/configuration"
 	"github.com/9elements/bmc-test-go/pkg/testdevice"
-	"github.com/stmcginnis/gofish/redfish"
+	"github.com/stmcginnis/gofish/schemas"
 )
 
 var (
@@ -69,7 +69,7 @@ func testRedfishGetFirmwareVersion(dev *testdevice.Device, _ *configuration.Conf
 		return false, nil, fmt.Errorf("redfish update service query failed: %w", err)
 	}
 
-	fwInventories, err := updateService.FirmwareInventories()
+	fwInventories, err := updateService.FirmwareInventory()
 	if err != nil {
 		return false, nil, fmt.Errorf("update service firmware inventories query failed: %w", err)
 	}
@@ -96,7 +96,7 @@ func testRedfishGetFirmwareVersion(dev *testdevice.Device, _ *configuration.Conf
 
 var errNoPowerInformation = errors.New("no power information for chassis available")
 
-func getPower(dev *testdevice.Device) ([]*redfish.Power, error) {
+func getPower(dev *testdevice.Device) ([]*schemas.Power, error) {
 	chassis, err := dev.RedfishService().Chassis()
 	if err != nil {
 		return nil, fmt.Errorf("redfish chassis query failed: %w", err)
@@ -106,7 +106,7 @@ func getPower(dev *testdevice.Device) ([]*redfish.Power, error) {
 		return nil, errNoChassis
 	}
 
-	power := make([]*redfish.Power, 0)
+	power := make([]*schemas.Power, 0)
 
 	for _, c := range chassis {
 		p, err := c.Power()
@@ -124,7 +124,7 @@ func getPower(dev *testdevice.Device) ([]*redfish.Power, error) {
 	return power, nil
 }
 
-func getPowerSupplies(dev *testdevice.Device) ([]*redfish.PowerSupply, error) {
+func getPowerSupplies(dev *testdevice.Device) ([]*schemas.PowerSupply, error) {
 	chassis, err := dev.RedfishService().Chassis()
 	if err != nil {
 		return nil, fmt.Errorf("redfish chassis query failed: %w", err)
@@ -134,7 +134,7 @@ func getPowerSupplies(dev *testdevice.Device) ([]*redfish.PowerSupply, error) {
 		return nil, errNoChassis
 	}
 
-	power := make([]*redfish.PowerSupply, 0)
+	power := make([]*schemas.PowerSupply, 0)
 
 	for _, c := range chassis {
 		pss, err := c.PowerSubsystem()
@@ -212,9 +212,9 @@ func testRedfishCheckPowerSupplyInformation(dev *testdevice.Device, cfg *configu
 					errNameMismatch, psu.SerialNumber, expPSU.SerialNumber), nil
 			}
 
-			if psu.EfficiencyPercent != expPSU.EfficiencyPercent {
+			if *psu.EfficiencyPercent != expPSU.EfficiencyPercent {
 				return false, fmt.Errorf("%w: power supplied efficiency percent: %f does not match config efficiency percent: %f",
-					errNameMismatch, psu.EfficiencyPercent, expPSU.EfficiencyPercent), nil
+					errNameMismatch, *psu.EfficiencyPercent, expPSU.EfficiencyPercent), nil
 			}
 		}
 	}
@@ -239,7 +239,7 @@ func testRedfishVoltagesSensorNames(dev *testdevice.Device, cfg *configuration.C
 		return false, fmt.Errorf("%w: Have: %d, want: %d", errNumPowerSupplyMismatch, len(power), cfg.PSUCount), nil
 	}
 
-	voltage := make([]redfish.Voltage, 0)
+	voltage := make([]schemas.Voltage, 0)
 
 	for _, p := range power {
 		if p != nil {
@@ -275,7 +275,7 @@ func testRedfishVoltageSensorValueThesholds(dev *testdevice.Device, _ *configura
 		return false, nil, err
 	}
 
-	voltage := make([]redfish.Voltage, 0)
+	voltage := make([]schemas.Voltage, 0)
 
 	for _, p := range power {
 		if p != nil {
@@ -288,9 +288,9 @@ func testRedfishVoltageSensorValueThesholds(dev *testdevice.Device, _ *configura
 	}
 
 	for _, rVolts := range voltage {
-		lc := rVolts.LowerThresholdCritical
-		uc := rVolts.UpperThresholdCritical
-		readingVolts := rVolts.ReadingVolts
+		lc := *rVolts.LowerThresholdCritical
+		uc := *rVolts.UpperThresholdCritical
+		readingVolts := *rVolts.ReadingVolts
 
 		gap := uc - lc
 
@@ -306,7 +306,7 @@ func testRedfishVoltageSensorValueThesholds(dev *testdevice.Device, _ *configura
 	return true, nil, nil
 }
 
-func getTemperatures(dev *testdevice.Device) ([]redfish.Temperature, error) {
+func getTemperatures(dev *testdevice.Device) ([]schemas.Temperature, error) {
 	chassis, err := dev.RedfishService().Chassis()
 	if err != nil {
 		return nil, fmt.Errorf("redfish chassis query failed: %w", err)
@@ -316,7 +316,7 @@ func getTemperatures(dev *testdevice.Device) ([]redfish.Temperature, error) {
 		return nil, errNoChassis
 	}
 
-	var temps []redfish.Temperature
+	var temps []schemas.Temperature
 
 	for _, c := range chassis {
 		thermal, err := c.Thermal()
@@ -376,13 +376,13 @@ func testRedfishTemperaturSensorValueThesholds(dev *testdevice.Device, _ *config
 	}
 
 	for _, t := range temps {
-		lc := t.LowerThresholdCritical
-		uc := t.UpperThresholdCritical
-		readingTemps := t.ReadingCelsius
+		lc := *t.LowerThresholdCritical
+		uc := *t.UpperThresholdCritical
+		readingTemps := *t.ReadingCelsius
 
 		gap := uc - lc
 
-		const f float32 = 1.2
+		const f float64 = 1.2
 
 		believable := (lc-gap*f) <= readingTemps && readingTemps <= (uc+gap*f)
 
@@ -394,7 +394,7 @@ func testRedfishTemperaturSensorValueThesholds(dev *testdevice.Device, _ *config
 	return true, nil, nil
 }
 
-func getFans(dev *testdevice.Device) ([]redfish.ThermalFan, error) {
+func getFans(dev *testdevice.Device) ([]schemas.ThermalFan, error) {
 	chassis, err := dev.RedfishService().Chassis()
 	if err != nil {
 		return nil, fmt.Errorf("redfish chassis query failed: %w", err)
@@ -404,7 +404,7 @@ func getFans(dev *testdevice.Device) ([]redfish.ThermalFan, error) {
 		return nil, errNoChassis
 	}
 
-	ret := make([]redfish.ThermalFan, 0)
+	ret := make([]schemas.ThermalFan, 0)
 
 	for _, c := range chassis {
 		thermals, err := c.Thermal()
@@ -455,13 +455,13 @@ func testRedfishThermalFanValues(dev *testdevice.Device, _ *configuration.Config
 
 	for _, fan := range fans {
 		if fan.ReadingUnits == "RPM" {
-			lc := float32(fan.LowerThresholdCritical)
-			uc := float32(fan.UpperThresholdCritical)
-			reading := float32(fan.Reading)
+			lc := float64(*fan.LowerThresholdCritical)
+			uc := float64(*fan.UpperThresholdCritical)
+			reading := float64(*fan.Reading)
 
-			gap := float32(uc - lc)
+			gap := uc - lc
 
-			const f float32 = 1.2
+			const f float64 = 1.2
 
 			believable := (lc-gap*f) <= reading && reading <= (uc+gap*f)
 
@@ -492,7 +492,7 @@ func testRedfishMemory(dev *testdevice.Device, cfg *configuration.Config) (
 		return false, errNoSystem, nil
 	}
 
-	mem := make([]*redfish.Memory, 0)
+	mem := make([]*schemas.Memory, 0)
 
 	for _, s := range sys {
 		m, err := s.Memory()
@@ -523,12 +523,12 @@ func testRedfishMemory(dev *testdevice.Device, cfg *configuration.Config) (
 				m.SerialNumber, cfg.Dimms.SerialNumber), nil
 		}
 
-		if m.CapacityMiB != cfg.Dimms.Capacity {
+		if *m.CapacityMiB != cfg.Dimms.Capacity {
 			return false, fmt.Errorf("%w: dimm capacity: have: %d, want: %d", errDimmPropertyMismatch,
 				m.CapacityMiB, cfg.Dimms.Capacity), nil
 		}
 
-		if m.OperatingSpeedMhz != cfg.Dimms.OperatingSpeedMHz {
+		if *m.OperatingSpeedMhz != cfg.Dimms.OperatingSpeedMHz {
 			return false, fmt.Errorf("%w: dimm operating speed: have: %d, want: %d", errDimmPropertyMismatch,
 				m.OperatingSpeedMhz, cfg.Dimms.OperatingSpeedMHz), nil
 		}
@@ -556,7 +556,7 @@ func testRedfishProcessor(dev *testdevice.Device, cfg *configuration.Config) (
 		return false, errNoSystem, nil
 	}
 
-	cpus := make([]*redfish.Processor, 0)
+	cpus := make([]*schemas.Processor, 0)
 
 	for _, s := range sys {
 		cpu, err := s.Processors()
@@ -611,7 +611,7 @@ func getFirmwareVersion(dev *testdevice.Device) (string, error) {
 		return "", fmt.Errorf("call to RedfishService().UpdateService() failed: %w", err)
 	}
 
-	inv, err := service.FirmwareInventories()
+	inv, err := service.FirmwareInventory()
 	if err != nil {
 		return "", fmt.Errorf("update service firmware inventories query failed: %w", err)
 	}

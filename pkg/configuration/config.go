@@ -118,7 +118,7 @@ type PSU struct {
 	Model             string  `yaml:"model"`
 	Partnumber        string  `yaml:"partNumber"`
 	SerialNumber      string  `yaml:"serialNumber"`
-	EfficiencyPercent float32 `yaml:"efficiencyPercent"`
+	EfficiencyPercent float64 `yaml:"efficiencyPercent"`
 }
 
 // FruExpect holds the information of one field replaceable unit for validation.
