@@ -33,3 +33,7 @@ ACTION_ZIZMOR_DISABLE_ERRORS: true
 
 # Golang
 GO_REVIVE_ARGUMENTS: ./...
+
+# Downgrate to warning because upstream problems that are out of our control
+REPOSITORY_TRIVY_DISABLE_ERRORS: true
+REPOSITORY_OSV_SCANNER_DISABLE_ERRORS: true
