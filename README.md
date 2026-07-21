@@ -19,7 +19,7 @@ go-task build
 ## Example
 
 ```sh
-./bin/bmc-test-go-linux-amd64-v0.0.0 suite -config contrib/example_config.yaml -suite redfish -exec-env local
+./bin/bmc-test-go-amd64 suite -config contrib/example_config.yaml -suite redfish -exec-env local
 ```
 
 ## Features

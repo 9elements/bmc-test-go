@@ -14,6 +14,8 @@ import (
 	"github.com/9elements/bmc-test-go/pkg/tests"
 )
 
+var version = "dev"
+
 var errNoTestsToExecute = errors.New("no tests to execute")
 
 func runAll(dev *testdevice.Device, cfg *configuration.Config) error {
@@ -115,6 +117,11 @@ func listSuites() {
 	}
 }
 
+func runVersionCmd() {
+	logger := log.New(os.Stdout, "", log.Lmsgprefix)
+	logger.Printf("%s", version)
+}
+
 func runCfgValidation(cfg *configuration.Config) error {
 	err := configuration.Validate(cfg)
 	if err != nil {
@@ -174,7 +181,9 @@ func run(args []string) error {
 		return listTests(flags.suite)
 	case listSuitesCmd:
 		listSuites()
-
+		return nil
+	case versionCmd:
+		runVersionCmd()
 		return nil
 	}
 
