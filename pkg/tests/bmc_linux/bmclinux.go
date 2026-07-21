@@ -11,19 +11,16 @@ func GetBMCLinuxTests() []*framework.Test {
 		{
 			Name:      "BMC Linux Startup health Test",
 			ShortName: "bmc-linux-00",
-			Status:    framework.StatusImplemented,
 			Function:  testBMCLinuxStartupHealth,
 		},
 		{
 			Name:      "BMC Linux Systemctl failed Test",
 			ShortName: "bmc-linux-01",
-			Status:    framework.StatusImplemented,
 			Function:  testBMCLinuxSystemctlFailed,
 		},
 		{
 			Name:      "BMC Linux Systemctl job list Test",
 			ShortName: "bmc-linux-02",
-			Status:    framework.StatusImplemented,
 			Function:  testBMCLinuxSystemctlJobList,
 		},
 	}

@@ -22,66 +22,52 @@ func GetTests() []*framework.Test {
 		{
 			Name:      "IPMI Sensor Voltage",
 			ShortName: "ipmi-00",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMISensorsVoltage,
 		},
 
 		{
 			Name:      "IPMI Sensor Temperature",
 			ShortName: "ipmi-01",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMISensorTemperature,
 		},
 
 		{
 			Name:      "IPMI Sensor Fans",
 			ShortName: "ipmi-02",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMISensorFans,
 		},
 
 		{
 			Name:      "IPMI Power Status",
 			ShortName: "ipmi-03",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMIPowerStatus,
 		},
 		{
 			Name:      "IPMI Chassis Uptime",
 			ShortName: "ipmi-04",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMIChassisUptime,
 		},
 		{
 			Name:      "IPMI Fru",
 			ShortName: "ipmi-05",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMIFru,
 		},
 		{
 			Name:      "IPMI DCMI Power Reading",
 			ShortName: "ipmi-06",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMIDCMIPowerReading,
 		},
 		{
 			Name:      "IPMI Watchdog Configuration",
 			ShortName: "ipmi-07",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMIWatchdogConfiguration,
 		},
 		{
 			Name:      "IPMI System GUID",
 			ShortName: "ipmi-08",
-			Status:    framework.StatusImplemented,
 			Function:  testIPMISystemGUID,
 		},
-		{
-			Name:      "IPMI DCMI Power reading",
-			ShortName: "ipmi-9",
-			Status:    framework.StatusImplemented,
-			Function:  nil,
-		},
+		// TODO: "IPMI DCMI Power reading", test
 	}
 }
 

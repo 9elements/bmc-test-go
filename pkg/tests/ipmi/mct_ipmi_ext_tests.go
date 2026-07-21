@@ -20,84 +20,72 @@ func GetIPMIMCTTests() []*framework.Test {
 		{
 			Name:      "MCP PWM Duty Set",
 			ShortName: "ipmi-mct-00",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTPWMDutySet,
 		},
 
 		{
 			Name:      "MCP PWM Duty Get",
 			ShortName: "ipmi-mct-01",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTPWMDutyGet,
 		},
 
 		{
 			Name:      "MCP Manufacture Mode Get",
 			ShortName: "ipmi-mct-02",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTManufacturModeGet,
 		},
 
 		{
 			Name:      "MCP Manufacture Mode Set",
 			ShortName: "ipmi-mct-03",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTManufacturModeSet,
 		},
 
 		{
 			Name:      "MCP Floor Duty Get",
 			ShortName: "ipmi-mct-04",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTFloorDutyGet,
 		},
 
 		{
 			Name:      "MCP Floor Duty Set",
 			ShortName: "ipmi-mct-05",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTFloorDutySet,
 		},
 
 		{
 			Name:      "MCP Get Fru Field",
 			ShortName: "ipmi-mct-06",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTGetFruField,
 		},
 
 		{
 			Name:      "MCP Set Fru Field",
 			ShortName: "ipmi-mct-07",
-			Status:    framework.StatusImplemented,
 			Function:  testMCTSetFruField,
 		},
 
 		{
 			Name:      "MCP Get Firmware String",
 			ShortName: "ipmi-mct-08",
-			Status:    framework.StatusImplemented,
 			Function:  testGetFirmwareString,
 		},
 
 		{
 			Name:      "MCP Config ECC Leaky bucket set",
 			ShortName: "ipmi-mct-09",
-			Status:    framework.StatusImplemented,
 			Function:  testECCLeakyBucketSet,
 		},
 
 		{
 			Name:      "MCP Config ECC Leaky bucket get",
 			ShortName: "ipmi-mct-10",
-			Status:    framework.StatusImplemented,
 			Function:  testECCLeakyBucketGet,
 		},
 
 		{
 			Name:      "MCP GPIO Status",
 			ShortName: "ipmi-mct-11",
-			Status:    framework.StatusImplemented,
 			Function:  testGPIOStatus,
 		},
 	}
@@ -308,7 +296,8 @@ func testMCTGetFruField(dev *testdevice.Device, cfg *configuration.Config) (
 func testMCTSetFruField(_ *testdevice.Device, _ *configuration.Config) (
 	bool, error, error,
 ) {
-	return false, framework.ErrNotImplemented, nil
+	// TODO: implement
+	return false, fmt.Errorf("test not implemented"), nil
 }
 
 var errUnexpectedFirmwareString = errors.New("unexpected firmware string")
