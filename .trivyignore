@@ -1,0 +1,2 @@
+# Golang indirect depedency golang.org/x/crypto is unmaintained. But we do not really use any crypto stuff.
+GO-2026-5932
