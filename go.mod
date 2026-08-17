@@ -1,6 +1,6 @@
 module github.com/9elements/bmc-test-go
 
-go 1.26.5
+go 1.26.6
 
 require (
 	github.com/sirupsen/logrus v1.10.0
